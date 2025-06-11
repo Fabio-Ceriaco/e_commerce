@@ -1,0 +1,2 @@
+web: gunicorn store.wsgi --log-field
+web: python3 manage.py migrate && gunicorn store.wsg

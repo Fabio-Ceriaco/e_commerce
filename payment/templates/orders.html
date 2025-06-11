@@ -1,0 +1,63 @@
+{% extends 'index.html' %}
+
+
+{% block title %}
+    Order {{order.id}}
+{% endblock title %}
+
+
+{% block content %}
+    <div class="container-fluid min-h-screen flex flex-col">
+        <div class="container-fluid flex flex-row bg-slate-800 h-50 justify-center items-center">
+            <h1 class="text-white text-7xl font-mono">Order Nº{{order.id}}</h1>
+        </div>
+        <div class="flex flex-row mt-6 justify-center items-center mx-5">
+            <div class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96">
+                <div class="mx-3 mb-0 border-b border-slate-200 pt-3 pb-2 px-1">
+                    <span class="text-sm text-slate-600 font-medium">
+                    <strong>Order {{ order.id}} - {{order.amount_paid}}€</strong>
+                    </span><br>
+                    <strong>Email: {{order.email}}</strong> <br>
+                    {% if order.date_shipped %}
+                        <strong>Date Shipped: {{ order.date_shipped}}</strong>
+                    {% else %}
+                        <strong>Date Ordered: {{ order.date_ordered}}</strong>
+                    {% endif %}
+                    <br>
+                    <strong>Full Name: {{ order.full_name}}</strong>
+                    <strong>Shipping Address: {{ order.shipping_address}}</strong>
+                </div>
+                {% for item in items %}
+                    <div class="p-4">
+                        <span><strong>Product: </strong>{{ item.product}}</span><br>
+                        <span><strong>Quantity: </strong>{{ item.quantity}}</span><br>
+                        {% if item.is_sale %}
+                            <span><strong>Price: </strong>{{ item.sale_price}}€</span>
+                        {% else %}
+                            <span><strong>Price: </strong>{{ item.price}}€</span>
+                        {% endif %}
+                        
+                        <div class="border"></div>
+                    </div>
+                {% endfor %}
+                <br>
+                {% if not order.shipped %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="shipping_status" value="true">
+                        <button type="submit" class="py-3 px-4 bg-blue-600 text-white rounded-lg mx-3 my-3">Mark as shipped</button>
+                    </form>
+                {% else %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="shipping_status" value="false">
+                        <button type="submit" class="py-3 px-4 bg-red-600 text-white rounded-lg mx-3 my-3">Mark as not shipped</button>
+                    </form>
+                {% endif %}
+                
+            </div>
+        </div>
+        <a href="{% url 'store:home' %}" class="px-4 py-3 w-20 flex self-center justify-center bg-blue-600 rounded-2xl text-white">Home</a>
+    </div>
+    
+{% endblock content %}

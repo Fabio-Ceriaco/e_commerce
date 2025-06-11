@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+input#id_username, input#id_email, input#id_password1, input#id_password2{
+    @apply w-full outline-blue-500 outline-2 rounded-2xl ml-2 pl-2;
+}

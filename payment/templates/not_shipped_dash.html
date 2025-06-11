@@ -1,0 +1,48 @@
+{% extends 'index.html' %}
+
+
+{% block title %}
+    Un-Shipped Items
+{% endblock title %}
+
+
+{% block content %}
+    <div class="container-fluid min-h-screen flex flex-col">
+        <div class="container-fluid flex flex-row bg-slate-800 h-50 justify-center items-center">
+            <h1 class="text-white text-7xl font-mono">Un-Shipped Items</h1>
+        </div>
+        <div class="flex flex-row mt-6 justify-center items-center mx-5">
+            <table class="table-auto border-separate border border-spacing-2">
+                <thead>
+                    <tr>
+                        <th class="border">Order</th>
+                        <th class="border">Price</th>
+                        <th class="border">Customer Email</th>
+                        <th class="border">Date Ordered</th>
+                        <th class="border">Shipped</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for order in orders %}
+                        <tr>
+                            <td class="border"><a href="{% url 'payment:orders' order.id %}">{{order.id}}</a></td>
+                            <td class="border">{{order.amount_paid}}€</td>
+                            <td class="border">{{order.email}}</td>
+                            <td class="border">{{order.date_ordered}}</td>
+                            <td class="border">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="shipping_status" value="false">
+                                    <input type="hidden" name="num" value="{{order.id}}">
+                                    <button type="submit" class="py-1 px-1 bg-blue-600 text-white rounded-lg mx-3 my-3">Mark as shipped</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+        </div>
+    </div>
+    
+{% endblock content %}

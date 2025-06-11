@@ -1,0 +1,80 @@
+<header>
+	<!-- navbar -->
+	<div class="border-b flex justify-around items-center">
+		<div class="bg-gray-100 py-1">
+            <div class="container">
+                <nav
+                    class="navbar relative navbar-expand-lg lg:flex lg:flex-wrap  items-center content-between text-black navbar-default"
+                    aria-label="Offcanvas navbar large">
+                    <div class="container max-w-7xl mx-auto w-full xl:px-4 lg:px-0">
+                        <a href="{% url 'store:home' %}" class="mx-2">Home</a>
+                        <a href="{% url 'store:about' %}" class="mx-2">About</a>
+                        <a href="{% url 'store:search_product' %}" class="mx-2">Search Products</a>
+                        
+                        <!-- Dropdown box start -->
+                        <div class="relative inline-block text-left mx-2">
+                            <button type="button" class="inline-flex justify-center w-full"  id="menu-button" aria-expanded="true" aria-haspopup="true">
+                                Categories
+                                <svg class="my-auto h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.584l3.71-3.354a.75.75 0 111.02 1.1l-4.25 3.846a.75.75 0 01-1.02 0l-4.25-3.846a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50 hidden group-hover:block" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                                <div class="py-1" role="none">
+                                        <a href="{% url 'store:category_summary' %}" class="text-gray-700 block px-4 py-2 text-sm" >Categories All</a>
+                                    {% for category in categories %}
+                                        <a href="{% url 'store:category' category.name %}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1">{{category.name}}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        {% if user.is_authenticated %}
+                            <div class="relative inline-block text-left mx-2">
+                                <button type="button" class="inline-flex justify-center w-full"  id="profile-menu" aria-expanded="true" aria-haspopup="true">
+                                    Profile
+                                    <svg class="my-auto h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.584l3.71-3.354a.75.75 0 111.02 1.1l-4.25 3.846a.75.75 0 01-1.02 0l-4.25-3.846a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                                <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50 hidden group-hover:block" role="profile-menu" aria-orientation="vertical" aria-labelledby="profile-menu" tabindex="-1">
+                                    <div class="py-1" role="none">
+                                            <a href="{% url 'store:user_profile' %}" class="text-gray-700 block px-4 py-2 text-sm" role="profile-menuitem" tabindex="-1">User Profile</a>
+                                            <a href="{% url 'store:update_info' %}" class="text-gray-700 block px-4 py-2 text-sm" role="profile-menuitem" tabindex="-1">User Info</a>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            {% if user.is_superuser %}
+                                <div class="relative inline-block text-left mx-2">
+                                    <button type="button" class="inline-flex justify-center w-full"  id="dash-menu" aria-expanded="true" aria-haspopup="true">
+                                        DashBoards
+                                        <svg class="my-auto h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.584l3.71-3.354a.75.75 0 111.02 1.1l-4.25 3.846a.75.75 0 01-1.02 0l-4.25-3.846a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                    <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50 hidden group-hover:block" role="dash-menu" aria-orientation="vertical" aria-labelledby="dash-menu" tabindex="-1">
+                                        <div class="py-1" role="none">
+                                                <a href="{% url 'payment:shipped_dash' %}" class="text-gray-700 block px-4 py-2 text-sm" role="dash-menuitem" tabindex="-1">Shipped Dash</a>
+                                                <a href="{% url 'payment:not_shipped_dash' %}" class="text-gray-700 block px-4 py-2 text-sm" role="dash-menuitem" tabindex="-1">Un-Shipped Dash</a>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            
+                            <a href="{% url 'store:logout' %}" class="mx-2">Logout</a>
+                        {% else %}
+                            <a href="{% url 'store:register' %}" class="mx-2">Register</a>
+                            <a href="{% url 'store:login' %}" class="mx-2">Login</a>
+                        {% endif %}
+                        <a href="{% url 'cart:cart' %}" class="mx-2">Cart<span id="cart_count">{{cart | length}}</span></a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+	</div>
+</header>
+
+

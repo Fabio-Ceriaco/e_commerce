@@ -1,0 +1,34 @@
+{% extends 'index.html' %}
+
+
+{% block title %}
+    {{category}}
+{% endblock title %}
+
+
+{% block content %}
+    <div class="container-fluid min-h-screen flex flex-col">
+        <div class="container-fluid flex flex-row bg-slate-800 h-50 justify-center items-center">
+            <h1 class="text-white text-9xl font-mono">{{category}}</h1>
+        </div>
+        <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:gap-4 xl:grid-cols-5">
+        <div class="flex flex-row mt-6 justify-center items-center mx-5">
+            {% for product in products %}
+            <div class="relative rounded-lg break-words border bg-white border-gray-300 card-product">
+                <div class="flex-auto p-4">
+					<div class="text-center relative flex justify-center">
+                        <img src="{{ product.image.url}}" alt="">
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <p>{{product.name}}</p>
+                </div>
+            </div>
+            {% endfor %} 
+        </div>
+    </div>
+    </div>
+    
+{% endblock content %}
+
+    

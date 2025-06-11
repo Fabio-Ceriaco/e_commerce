@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+
+
+{% block title %}
+    Update User Info
+{% endblock title %}
+
+
+{% block content %}
+    <div class="container-fluid min-h-screen flex flex-col">
+        <div class="container-fluid flex flex-row bg-slate-800 h-50 justify-center items-center">
+            <h1 class="text-white text-7xl font-mono">Update User Info</h1>
+        </div>
+        <div class="flex flex-col mt-6 justify-center items-center mx-5">
+            <strong>Billing Information</strong>
+            <form action="{% url 'store:update_info' %}" method="post" class="flex flex-col mx-auto my-5" novalidate>
+                {% csrf_token %}
+                <div class="flex flex-row justify-center items-center mx-auto">
+                    <div class="flex flex-col">
+                        {% for field in form %}
+                            <div class="my-3 w-100 flex flex-col flex-wrap">
+                                <label>{{field.label_tag}}</label>
+                                {{field}}
+                                <div class="text-red-600 text-xs">{{field.errors}}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="flex flex-col">
+                        <strong>Shipping Information</strong>
+                        {% for field in shipping_form %}
+                            <div class="my-3 w-100 flex flex-col flex-wrap">
+                                <label>{{field.label_tag}}</label>
+                                {{field}}
+                                <div class="text-red-600 text-xs">{{field.errors}}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                
+                </div>
+                
+                    
+                
+                <div class="my-3 flex justify-center items-center">
+                    <button type="submit" class="px-4 py-2 bg-blue-600 rounded-xl cursor-pointer">Update Info</button>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

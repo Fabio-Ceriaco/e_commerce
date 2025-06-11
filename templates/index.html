@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'dist/style.css' %}">
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+
+    <title>Store - 
+    {% block title %}
+        
+    {% endblock title %}
+        </title>
+</head>
+<body class="min-h-screen">
+    {% include 'navbar.html' %}
+
+    {% if messages %}
+        
+        {% for message in messages %}
+            <div class="bg-blue-600 w-100 flex left-80 right-70 justify-center items-center my-3 rounded-2xl p-3 absolute animate-pulse">
+                <span>{{message}}</span>
+            </div>
+        {% endfor %}
+            
+    {% endif %}
+    <div id="#content">
+        {% block content %}
+            
+        {% endblock content %}
+    </div>
+    
+
+		<!-- footer -->
+	{% include 'footer.html' %}
+
+    
+</body>
+</html>

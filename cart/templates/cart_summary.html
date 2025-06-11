@@ -1,0 +1,110 @@
+{% extends 'index.html' %}
+
+
+{% block title %}
+    Shopping Cart
+{% endblock title %}
+
+
+{% block content %}
+	<div class="container-fluid min-h-screen flex flex-col">
+        <div class="container-fluid flex flex-row bg-slate-800 h-50 justify-center items-center">
+            <h1 class="text-white text-8xl font-mono">Shopping Cart</h1>
+        </div>
+        <div class="flex flex-cols-3 mt-6 gap-3 flex-wrap justify-center items-center mx-5">
+            {% if not products %}
+				<p class="font-bold text-5xl">No products in Cart</p>
+			{% else %}
+				{% for product in products %}
+					<div class="w-50 border rounded-2xl flex flex-col justify-center items-center">
+						<img src="{{ product.image.url }}" alt="" class="w-1/2 my-4 rounded-2xl shadow-lg/80 inset-shadow-sm/80">
+						<div class="flex flex-row justify-center items-center mx-auto">
+							<select name="quantity" class="border rounded-2xl p-2 text-center" id="select{{product.id}}">
+									{% for key, value in quantities.items %}
+										{% if key == product.id|slugify %}
+											<option selected>{{value}}</option>
+										{% endif%}
+									{% endfor %}
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+							</select>
+						</div>
+						<p>{{ product.name }}</p>
+                        {% if product.is_sale %}
+                            <p>{{product.sale_price}}€</p>
+                        {% else %}
+                            <p>{{ product.price }}€</p>
+                        {% endif %}
+						
+						<div class="flex flex-col ">
+                <button type="button" data-index="{{product.id}}" class="px-4 py-3 my-4 bg-blue-600 mx-auto rounded-2xl text-center" id="update_cart">Update Cart</button>
+                <button type="button" data-index="{{product.id}}" class="px-4 py-3 my-4 bg-red-600 mx-auto text-white rounded-2xl text-center" id="delete_item">Delete Item</button>
+            </div>
+					</div>
+				{% endfor %}
+                <strong>Total:{{totals}}€</strong>
+                <a href="{% url 'payment:checkout' %}" class="px-4 py-3 bg-blue-600 text-white rounded-2xl">CheckOut</a>
+			{% endif %}
+        </div>
+		<div class="flex flex-row justify-around my-5">
+            <div class="flex flex-col">
+                <a href="{% url 'store:home' %}" class="px-4 py-3 bg-blue-600 w-20 mx-auto rounded-2xl text-center">Home</a>
+            </div>
+            
+        </div>
+    </div>
+
+<script>
+    // update cart
+	$(document).on('click', '#delete_item', function(e){
+    e.preventDefault();
+	// grab product:id
+	let productid = $(this).data('index')
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'cart:cart_delete' %}",
+        data: {
+            product_id: productid,
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post',
+        },
+        success: function(json){
+            //console.log(json) ;
+            //document.getElementById('cart_count').textContent = json.qty // update cart
+			location.reload();
+        },
+        error: function(xhr, errmsg, err){
+
+        },
+    });
+})
+
+    //delete item cart
+	$(document).on('click', '#update_cart', function(e){
+    e.preventDefault();
+	// grab product:id
+	let productid = $(this).data('index')
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'cart:cart_update' %}",
+        data: {
+            product_id: productid,
+            product_quantity: $('#select' + productid + ' option:selected').text(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post',
+        },
+        success: function(json){
+            //console.log(json) ;
+            //document.getElementById('cart_count').textContent = json.qty // update cart
+			location.reload();
+        },
+        error: function(xhr, errmsg, err){
+
+        },
+    });
+})
+</script>
+{% endblock content %}
+    

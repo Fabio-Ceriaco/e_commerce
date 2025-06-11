@@ -1,0 +1,73 @@
+{% extends 'index.html' %}
+
+
+{% block title %}
+    {{product.name}} Page
+{% endblock title %}
+    
+
+
+{% block content %}
+    <div class="container-fluid min-h-screen flex flex-col">
+        <div class="container-fluid flex flex-row bg-slate-800 h-50 justify-center items-center">
+            <h1 class="text-white text-9xl font-mono">{{product.name}} Page</h1>
+        </div>
+        <div class="container mx-auto flex flex-rows-1 flex-wrap justify-center items-center border my-5 rounded-2xl">
+            <div class="flex flex-col justify-center items-center mx-2">
+                <img src="{{product.image.url}}" alt="{{product.id}}" class="h-80 rounded-xl my-3">
+            </div>
+            <div class="flex flex-col justify-center items-center mx-auto">
+                <p>{{product.description}}</p>
+                {% if product.is_sale %}
+                    <p>{{product.sale_price}}€</p>
+                {% else %}
+                    <p>{{product.price}}€</p>
+                {% endif %}
+            </div>
+            <div class="flex flex-row justify-center items-center mx-auto">
+                <select name="quantity" class="border rounded-2xl p-2 text-center" id="quantity_cart">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+        </div>
+        <div class="flex flex-row justify-around my-5">
+            <div class="flex flex-col">
+                <a href="{% url 'store:home' %}" class="px-4 py-3 bg-blue-600 w-20 mx-auto rounded-2xl text-center">Home</a>
+            </div>
+            <div class="flex flex-col ">
+                <button type="button" value="{{product.id}}" class="px-4 py-3 bg-blue-600 mx-auto rounded-2xl text-center" id="add_cart">Add Cart</button>
+            </div>
+        </div>
+        
+    </div>
+
+<script>
+    // check if button press
+
+$(document).on('click', '#add_cart', function(e){
+    e.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'cart:cart_add' %}",
+        data: {
+            product_id: $('#add_cart').val(),
+            product_quantity: $('#quantity_cart option:selected').text(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post',
+        },
+        success: function(json){
+           //console.log(json)
+            document.getElementById('cart_count').textContent = json.qty // update cart
+            location.reload();
+        },
+        error: function(xhr, errmsg, err){
+
+        },
+    });
+})
+</script>
+{% endblock content %}
+    
